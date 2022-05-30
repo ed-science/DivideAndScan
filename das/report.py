@@ -103,11 +103,9 @@ class NmapMerger:
 		except OSError:
 			sorted_reports = [str(r) for r in sorted(text_reports)]
 
-		i = 1
-		for report in sorted_reports:
+		for i, report in enumerate(sorted_reports, start=1):
 			Logger.print_separator(report, prefix=f'{i}/{total_reports}')
 			os.system(f'cat {report}')
-			i += 1
 
 	def generate(self):
 		"""Perform all the steps needed to generate a single Nmap report."""
@@ -185,11 +183,7 @@ class NmapMerger:
 		scaninfo = root.find('scaninfo').attrib
 		merged = {**nmaprun, **scaninfo}
 
-		d = {}
-		for key, value in merged.items():
-			d[key] = value.replace('"', '&quot;')
-
-		return d
+		return {key: value.replace('"', '&quot;') for key, value in merged.items()}
 
 	@staticmethod
 	def add_header(merged_xml, d):
@@ -201,8 +195,7 @@ class NmapMerger:
 		:param d: dictionary containing XML metadata
 		:type d: dict
 		"""
-		nmap_header = '<?xml version="1.0" encoding="UTF-8"?>'
-		nmap_header += '<!DOCTYPE nmaprun>'
+		nmap_header = '<?xml version="1.0" encoding="UTF-8"?>' + '<!DOCTYPE nmaprun>'
 		nmap_header += '<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>'
 		nmap_header += '<!-- Nmap scan initiated by DivideAndScan: https://github.com/snovvcrash/DivideAndScan -->'
 		nmap_header += '<!-- Nmap reports merged with nMap_Merger: https://github.com/CBHue/nMap_Merger -->'
