@@ -151,7 +151,7 @@ def main():
 			elif args.ports:
 				ss.nmap_by_ports()
 
-		elif any(o for o in output.values()):
+		elif any(output.values()):
 			Parallelism = namedtuple('Parallelism', 'enabled processes')
 			parallel = Parallelism(args.parallel, args.proc)
 
@@ -171,7 +171,7 @@ def main():
 			nm = NmapMerger(args.db, args.hosts, args.ports)
 			nm.show()
 
-		elif any(o for o in output.values()):
+		elif any(output.values()):
 			nm = NmapMerger(args.db, args.hosts, args.ports, output)
 			nm.generate()
 
